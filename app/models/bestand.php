@@ -13,6 +13,15 @@ class Bestand {
         'application/pdf', 
         'image/jpeg', 
         'image/png', 
+        'application/zip',
+        'application/x-zip-compressed',
+        'application/x-zip',
+        'application/x-rar-compressed',
+        'application/x-rar',
+        'application/x-7z-compressed',
+        'application/x-7z',
+        'application/x-tar',
+        'application/x-tar-compressed',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ]; // Allowed: PDF, JPG, PNG, DOCX
     

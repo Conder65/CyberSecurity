@@ -1,25 +1,38 @@
-<?php
-declare(strict_types=1);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestand uploaden</title>
+    <link rel="stylesheet" href="public/css/style.css">
+    <script src="public/js/script.js" defer></script>
+</head>
 
-$action = $_GET['action'] ?? ($_POST['action'] ?? null);
+<body>
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <header class="card__header">
+        <h1 id="page-title">Bestand uploaden</h1>
+        <p class="muted">Kies een bestand en voeg eventueel een korte opmerking toe.</p>
+      </header>
 
-// If the upload form was submitted, handle it.
-if ($action === null) {
-  $action = isset($_FILES['bestand']) ? 'upload' : 'home';
-}
+      <form class="form" action="app/controllers/uploadController.php" method="post" enctype="multipart/form-data">
+        <div class="field">
+          <label for="bestand">Kies een bestand</label>
+          <input type="file" id="bestand" name="bestand" accept=".zip,application/zip" required>
+        </div>
 
-switch ($action) {
-  case 'upload':
-    require_once __DIR__ . '/app/controllers/uploadController.php';
+        <div class="field">
+          <label for="opmerking">Opmerking <span class="muted">(optioneel)</span></label>
+          <textarea name="opmerking" id="opmerking" rows="3" placeholder="Bijv. wat dit bestand bevat…"></textarea>
+        </div>
 
-    $controller = new UploadController();
-    $controller->handle();
-    break;
+        <div class="actions">
+          <button class="button" type="submit">Uploaden</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
 
-  default:
-    header('Content-Type: text/plain; charset=utf-8');
-    echo 'Home. Submit the upload form from index.html.';
-    break;
-}
-
-?>
+</html>

@@ -3,7 +3,7 @@
 
 class Upload {
     // Directory where uploaded files will be securely stored
-    private $target_dir = __DIR__ . "/../../storage/uploads/"; 
+    private $target_dir = __DIR__ . "/../../public/uploads/"; 
 
     // Handles the file upload process and moves it to the target directory
     public function saveBestand(Bestand $bestand) {
