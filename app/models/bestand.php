@@ -46,3 +46,4 @@ class Bestand {
         return $this->tmp_name;
     }
 }
+?>

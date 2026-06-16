@@ -51,9 +51,26 @@ body {
 .page {
   min-height: 100%;
   display: grid;
-  place-items: center;
+  gap: 18px;
+  justify-content: center; /* center grid track(s) horizontally */
+  align-content: center; /* center cards vertically in the viewport */
+  justify-items: center; /* center items inside their grid cells */
   padding: 28px 16px;
 }
+
+
+
+@media (min-width: 860px) {
+  .page {
+    /* side-by-side layout; keep both cards centered overall */
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(380px, 560px);
+    align-items: start;
+    justify-items: center;
+  }
+}
+
+
 
 .card {
   width: min(560px, 100%);
@@ -69,11 +86,19 @@ body {
   margin-bottom: 16px;
 }
 
-h1 {
+h1, h2 {
   margin: 0 0 6px 0;
-  font-size: 22px;
   letter-spacing: -0.02em;
 }
+
+h1 {
+  font-size: 22px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
 
 .muted {
   color: var(--muted);
@@ -95,6 +120,7 @@ label {
 }
 
 input[type="file"],
+input[type="text"],
 textarea {
   width: 100%;
   border: 1px solid var(--border);
@@ -106,6 +132,7 @@ textarea {
   outline: none;
   transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
 }
+
 
 textarea {
   resize: vertical;

@@ -18,7 +18,8 @@
         <p class="muted">Kies een bestand en voeg eventueel een korte opmerking toe.</p>
       </header>
 
-      <form class="form" action="upload.php" method="post" enctype="multipart/form-data">
+      <form class="form" action="index.php?action=upload" method="post" enctype="multipart/form-data">
+
         <div class="field">
           <label for="bestand">Kies een bestand</label>
           <input type="file" id="bestand" name="bestand" required>
@@ -34,6 +35,36 @@
         </div>
       </form>
     </section>
+
+    <section class="card" aria-labelledby="download-title">
+      <header class="card__header">
+        <h2 id="download-title">2. Bestand Downloaden</h2>
+      </header>
+
+      <form class="form download-form" action="/download" method="POST">
+        <div class="field">
+          <label for="code">Geheime 6-cijferige pincode</label>
+          <input
+            type="text"
+            id="code"
+            name="code"
+            placeholder="000000"
+            required
+            maxlength="6"
+            autocomplete="off"
+          >
+          <p class="muted">
+            Beveiligingswaarschuwing: Na 3 foutieve invoerpogingen wordt je IP-adres tijdelijk geblokkeerd.
+          </p>
+        </div>
+
+        <div class="actions">
+          <button class="button" type="submit">Valideer & Download</button>
+        </div>
+      </form>
+    </section>
+
+
   </main>
 </body>
 
