@@ -18,10 +18,10 @@
         <p class="muted">Kies een bestand en voeg eventueel een korte opmerking toe.</p>
       </header>
 
-      <form class="form" action="upload.php" method="post" enctype="multipart/form-data">
+      <form class="form" action="app/controllers/uploadController.php" method="post" enctype="multipart/form-data">
         <div class="field">
           <label for="bestand">Kies een bestand</label>
-          <input type="file" id="bestand" name="bestand" required>
+          <input type="file" id="bestand" name="bestand" accept=".zip,application/zip" required>
         </div>
 
         <div class="field">
