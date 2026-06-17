@@ -7,6 +7,7 @@ class Bestand {
     private $filesize;
     private $filetype;
     private $tmp_name;
+    private $error;
     
     // Security constraints (Day 2 - Step 4: Basisbeveiliging)
     private $allowed_types = [
@@ -23,36 +24,68 @@ class Bestand {
         'application/x-tar',
         'application/x-tar-compressed',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ]; // Allowed: PDF, JPG, PNG, DOCX
+    ]; // Allowed: PDF, JPG, PNG, ZIP, RAR, DOCX
     
     private $max_size = 5242880; // Maximum file size limit: 5MB (in bytes)
 
     public function __construct($file_data = null) {
         if ($file_data) {
-            $this->filename = $file_data['name'];
-            $this->filesize = $file_data['size'];
-            $this->filetype = $file_data['type'];
-            $this->tmp_name = $file_data['tmp_name'];
+            $this->filename = $file_data['name'] ?? '';
+            $this->filesize = $file_data['size'] ?? 0;
+            $this->filetype = $file_data['type'] ?? '';
+            $this->tmp_name = $file_data['tmp_name'] ?? '';
+            $this->error    = $file_data['error'] ?? UPLOAD_ERR_NO_FILE;
         }
     }
 
-    // Validates the file type to prevent malicious uploads (e.g., .php, .exe)
-    public function validateType() {
-        return in_array($this->filetype, $this->allowed_types);
+    /**
+     * Advanced Cybersecurity Validation: Inspects the real binary structure (Magic Bytes)
+     * instead of trusting the user-tamperable frontend Content-Type.
+     */
+    public function isValidZip(): bool {
+        // 1. Check if the PHP upload process itself encountered any system errors
+        if ($this->error !== UPLOAD_ERR_OK) {
+            return false;
+        }
+
+        // 2. Validate the file size against the defined maximum 5MB limit
+        if ($this->filesize > $this->max_size) {
+            return false;
+        }
+
+        // 3. Prevent Extension Bypass (Double extensions like file.php.zip)
+        $extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        if (!in_array($extension, ['pdf', 'jpg', 'jpeg', 'png', 'zip', 'rar', '7z', 'tar', 'docx'], true)) {
+            return false;
+        }
+
+        // 4. Server-Side Deep Content Inspection (MIME-Type validation using finfo)
+        if (file_exists($this->tmp_name)) {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $realMimeType = $finfo->file($this->tmp_name);
+
+            // Verify if the real inspected MIME-type exists in our whitelist array
+            return in_array($realMimeType, $this->allowed_types, true);
+        }
+
+        return false;
     }
 
-    // Validates the file size against the defined maximum limit
-    public function validateSize() {
-        return $this->filesize <= $this->max_size;
-    }
-
-    // Getters for controller access
-    public function getFilename() {
+    // Getters for controller and processor model access
+    public function getName(): string {
         return $this->filename;
     }
 
-    public function getTmpName() {
+    public function getTmpName(): string {
         return $this->tmp_name;
+    }
+
+    public function getSize(): int {
+        return $this->filesize;
+    }
+
+    public function getError(): int {
+        return $this->error;
     }
 }
 ?>
