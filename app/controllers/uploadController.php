@@ -1,8 +1,10 @@
 <?php
 // app/controllers/uploadController.php
-require_once __DIR__ . '/../services/AuthService.php';
-require_once __DIR__ . '/../models/bestand.php';
-require_once __DIR__ . '/../models/upload.php';
+
+// FIXED: Using absolute path routing via dirname to guarantee error-free inclusions
+require_once dirname(__DIR__) . '/services/AuthService.php';
+require_once dirname(__DIR__) . '/models/bestand.php';
+require_once dirname(__DIR__) . '/models/upload.php';
 
 class UploadController {
     
@@ -13,14 +15,14 @@ class UploadController {
         // Day 3 - Step 1 Guard: Block any user who is not logged in
         AuthService::checkAccess();
 
-        // FIXED: Changed 'uploaded_file' to 'bestand' to match index.php HTML form field name
+        // Check if the file field exists in the POST request context
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bestand'])) {
             
             // 1. Initialize the Bestand model with the uploaded file data
             $bestand = new Bestand($_FILES['bestand']);
             
             // 2. Get the logged-in User_ID from the secure session
-            $user_id = (int)$_SESSION['user_id'];
+            $user_id = (int)($_SESSION['user_id'] ?? 0);
 
             // 3. Extract the optional comment/note to use it as the dynamic 'Title' field in the database
             $title = isset($_POST['opmerking']) ? trim($_POST['opmerking']) : '';
@@ -32,7 +34,7 @@ class UploadController {
             $uploadModel = new Upload();
             $result = $uploadModel->saveBestand($bestand, $user_id, $title);
 
-            // 5. Return the outcome to the view (as a JSON response for frontend or redirect)
+            // 5. Return the outcome to the view (as a JSON response)
             if (!headers_sent()) {
                 header('Content-Type: application/json; charset=utf-8');
             }
@@ -62,6 +64,6 @@ class UploadController {
     }
 }
 
-// FIXED: Instantiate and trigger the handler automatically when the controller script is invoked by HTML action
+// Instantiate and trigger the handler automatically when the controller script is invoked by HTML action
 $controller = new UploadController();
 $controller->handleUpload();
