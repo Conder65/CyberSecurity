@@ -127,4 +127,73 @@ class AuthService {
         return ['success' => false, 'message' => 'Fout: Registratie mislukt.'];
 
     }
+    /**
+
+     * SYSTEM 2: USER LOGIN
+
+     * Authenticates a user against your actual 'users' table columns.
+
+     */
+
+    public function login(string $email_or_name, string $password): array {
+
+        if (empty($email_or_name) || empty($password)) {
+
+            return ['success' => false, 'message' => 'Fout: Vul alle velden in!'];
+
+        }
+
+
+
+        try {
+
+            // Fetch user by either Name or Email using your global safe database connection
+
+            $query = "SELECT * FROM users WHERE Email = :input OR Name = :input LIMIT 1";
+
+            $stmt = $this->db->prepare($query);
+
+            $stmt->execute([':input' => $email_or_name]);
+
+            $user = $stmt->fetch();
+
+
+
+            // Verify if user exists and if the Bcrypt hash matches the plain text password
+
+            if ($user && password_verify($password, $user['Password'])) {
+
+                // Set secure session variables to track user state
+
+                $_SESSION['is_logged_in'] = true;
+
+                $_SESSION['user_id']      = $user['User_ID'];
+
+                $_SESSION['username']     = $user['Name'];
+
+                $_SESSION['user_role']    = $user['Role'];
+
+                $_SESSION['last_activity']= time();
+
+
+
+                return ['success' => true, 'message' => 'Succes: Succesvol ingelogd!'];
+
+            }
+
+
+
+        } catch (PDOException $e) {
+
+            error_log("Login DB Error: " . $e->getMessage());
+
+        }
+
+
+
+        // Generic error message for security (prevents enumeration attacks)
+
+        return ['success' => false, 'message' => 'Fout: Ongeldige inloggegevens!'];
+
+    }
 }
