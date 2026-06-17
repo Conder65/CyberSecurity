@@ -20,4 +20,111 @@ class AuthService {
             ]);
         }
     }
+    /**
+
+     * SYSTEM 1: USER REGISTRATION 
+
+     * Inserts a new user into your actual 'users' table securely.
+
+     */
+
+    public function register(string $name, string $email, string $password, int $role = 0): array {
+
+        // 1. Basic validation
+
+        if (empty($name) || empty($email) || empty($password)) {
+
+            return ['success' => false, 'message' => 'Fout: Alle velden zijn verplicht!'];
+
+        }
+
+
+
+        // 2. Security Check: Enforce strong password policy (Day 3 Requirement)
+
+        $password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+
+        if (!preg_match($password_regex, $password)) {
+
+            return [
+
+                'success' => false,
+
+                'message' => 'Fout: Wachtwoord is te zwak! Minimaal 8 tekens, 1 hoofdletter, 1 cijfer en 1 speciaal teken.'
+
+            ];
+
+        }
+
+
+
+        try {
+
+            // 3. Security Check: Check if Email or Name already exists using your safe $pdo instance
+
+            $check_query = "SELECT 1 FROM users WHERE Email = :email OR Name = :name LIMIT 1";
+
+            $stmt = $this->db->prepare($check_query);
+
+            $stmt->execute([':email' => $email, ':name' => $name]);
+
+            
+
+            if ($stmt->fetch()) {
+
+                return ['success' => false, 'message' => 'Fout: Gebruikersnaam of e-mail bestaat al!'];
+
+            }
+
+
+
+            // 4. Cryptography: Securely hash the password using Bcrypt
+
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+
+
+            // 5. Database Execution: Insert into your specific table structure
+
+            $insert_query = "INSERT INTO users (Name, Password, Email, Role) VALUES (:name, :password, :email, :role)";
+
+            $insert_stmt = $this->db->prepare($insert_query);
+
+            
+
+            $success = $insert_stmt->execute([
+
+                ':name'     => $name,
+
+                ':password' => $hashed_password,
+
+                ':email'    => $email,
+
+                ':role'     => $role // Default is 0 (regular user)
+
+            ]);
+
+
+
+            if ($success) {
+
+                return ['success' => true, 'message' => 'Succes: Account succesvol aangemaakt!'];
+
+            }
+
+
+
+        } catch (PDOException $e) {
+
+            error_log("Registration DB Error: " . $e->getMessage());
+
+            return ['success' => false, 'message' => 'Fout: Er is een databasefout opgetreden.'];
+
+        }
+
+
+
+        return ['success' => false, 'message' => 'Fout: Registratie mislukt.'];
+
+    }
 }
