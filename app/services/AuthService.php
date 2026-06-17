@@ -1,6 +1,6 @@
 <?php
 // Automatically include your existing PDO configuration
-require_once __DIR__ . '/../core/database.php';
+require_once __DIR__ . '/../../core/database.php';
 
 class AuthService {
     private $db;

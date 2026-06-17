@@ -27,7 +27,7 @@ $isAuthenticated = isset($_SESSION['user']);
       <button class="button" id="login-button" type="button">Inloggen</button>
     </div>
     <div id="register-form" class="hidden">
-        <form action="app/controllers/registerController.php" method="post">
+        <form action="app/controllers/userController.php" method="post">
 
             <label for="new-username">Gebruikersnaam:</label>
             <input type="text" id="new-username" name="username" required>
@@ -40,20 +40,13 @@ $isAuthenticated = isset($_SESSION['user']);
 
             <label for="email">E-mail:</label>
             <input type="email" id="email" name="email" required>
-
-            <p>Upload of download:</p>
-            <input type="radio" id="upload" name="role" value="upload" required>
-            <label for="upload">Uploaden</label>
-            <input type="radio" id="download" name="role" value="download" required>
-            <label for="download">Downloaden</label>
-
             <button type="submit" class="button" style="width: 100%;">Registreren</button>
         </form>
     </div>
 
     <div id="login-form" class="hidden">
 
-            <form action="app/controllers/loginController.php" method="post">
+            <form action="app/controllers/userController.php" method="post">
                 <label for="username">Gebruikersnaam:</label>
                 <input type="text" id="username" name="username" required>
 
