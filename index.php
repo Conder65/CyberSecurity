@@ -1,5 +1,7 @@
 <?php
-require_once("core/database.php")
+require_once("app/services/AuthService.php");
+$authService = new AuthService();
+$authService->checkAccess();
 ?>
 
 <!DOCTYPE html>
