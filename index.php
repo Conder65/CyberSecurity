@@ -4,13 +4,14 @@ $isAuthenticated = isset($_SESSION['user']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bestand uploaden</title>
-    <link rel="stylesheet" href="public/css/style.css">
-    <script src="public/js/script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestand uploaden</title>
+  <link rel="stylesheet" href="public/css/style.css">
+  <script src="public/js/script.js" defer></script>
 </head>
 
 <body>
@@ -27,35 +28,31 @@ $isAuthenticated = isset($_SESSION['user']);
       <button class="button" id="login-button" type="button">Inloggen</button>
     </div>
     <div id="register-form" class="hidden">
-        <form action="app/controllers/userController.php" method="post">
-
-            <label for="new-username">Gebruikersnaam:</label>
-            <input type="text" id="new-username" name="username" required>
-
-            <label for="new-password">Wachtwoord:</label>
-            <input type="password" id="new-password" name="password" required>
-
-            <label for="confirm-password">Bevestig wachtwoord:</label>
-            <input type="password" id="confirm-password" name="confirm_password" required>
-
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required>
-            <button type="submit" class="button" style="width: 100%;">Registreren</button>
-        </form>
+      <form action="app/controllers/userController.php" method="post">
+        <input type="hidden" name="action" value="register">
+        <label for="new-username">Gebruikersnaam:</label>
+        <input type="text" id="new-username" name="username" required>
+        <label for="new-password">Wachtwoord:</label>
+        <input type="password" id="new-password" name="password" required>
+        <label for="confirm-password">Bevestig wachtwoord:</label>
+        <input type="password" id="confirm-password" name="confirm_password" required>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit" class="button" style="width: 100%;">Registreren</button>
+      </form>
     </div>
 
     <div id="login-form" class="hidden">
 
-            <form action="app/controllers/userController.php" method="post">
-                <label for="username">Gebruikersnaam:</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="password">Wachtwoord:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Inloggen</button>
-            </form>
-</main>
+      <form action="app/controllers/userController.php" method="post">
+        <input type="hidden" name="action" value="login">
+        <label for="username">Gebruikersnaam:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Wachtwoord:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Inloggen</button>
+      </form>
+  </main>
   <main class="page">
     <section id="upload-section" class="card" aria-labelledby="page-title">
 

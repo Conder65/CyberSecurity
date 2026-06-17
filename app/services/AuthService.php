@@ -5,21 +5,18 @@ require_once __DIR__ . '/../../core/database.php';
 class AuthService {
     private $db;
 
-    public function __construct() {
-        // Use the global $pdo instance created in your database.php file
-        global $pdo;
-        $this->db = $pdo;
+public function __construct() {
+    $this->db = Database::getInstance();
 
-        // Step 1: Start secure session if not already active
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start([
-                'cookie_lifetime' => 900, // 15 minutes timeout
-                'cookie_httponly' => true, // Mitigation against XSS (cannot be read via JavaScript)
-                'cookie_secure' => false,  // Set to true if your development environment uses HTTPS
-                'use_strict_mode' => true
-            ]);
-        }
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start([
+            'cookie_lifetime' => 900,
+            'cookie_httponly' => true,
+            'cookie_secure'   => false,
+            'use_strict_mode' => true
+        ]);
     }
+}
     /**
 
      * SYSTEM 1: USER REGISTRATION 
