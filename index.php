@@ -1,3 +1,7 @@
+<?php
+require_once("core/database.php")
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
