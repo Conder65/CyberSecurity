@@ -1,6 +1,6 @@
 <?php
 session_start();
-$isAuthenticated = isset($_SESSION['user']);
+$isAuthenticated = isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true;
 ?>
 <!DOCTYPE html>
 <html lang="en">

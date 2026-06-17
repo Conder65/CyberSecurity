@@ -5,18 +5,19 @@ require_once __DIR__ . '/../../core/database.php';
 class AuthService {
     private $db;
 
-public function __construct() {
-    $this->db = Database::getInstance();
+    public function __construct() {
+        $this->db = Database::getInstance();
 
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start([
-            'cookie_lifetime' => 900,
-            'cookie_httponly' => true,
-            'cookie_secure'   => false,
-            'use_strict_mode' => true
-        ]);
+        // Step 1: Start secure session if not already active
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start([
+                'cookie_lifetime' => 900, // 15 minutes timeout
+                'cookie_httponly' => true, // Mitigation against XSS (cannot be read via JavaScript)
+                'cookie_secure' => false,  // Set to true if your development environment uses HTTPS
+                'use_strict_mode' => true
+            ]);
+        }
     }
-}
     /**
 
      * SYSTEM 1: USER REGISTRATION 
@@ -146,11 +147,11 @@ public function __construct() {
 
             // Fetch user by either Name or Email using your global safe database connection
 
-            $query = "SELECT * FROM users WHERE Email = :input OR Name = :input LIMIT 1";
+            $query = "SELECT * FROM users WHERE Email = :email OR Name = :name LIMIT 1";
 
             $stmt = $this->db->prepare($query);
 
-            $stmt->execute([':input' => $email_or_name]);
+            $stmt->execute([':email' => $email_or_name, ':name' => $email_or_name]);
 
             $user = $stmt->fetch();
 

@@ -1,236 +1,389 @@
-/* Minimal, modern baseline */
+/* =============================================
+   Base Styles & Custom Properties (Light Mode)
+   ============================================= */
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --text: #0f172a;        /* slate-900 */
-  --muted: #64748b;       /* slate-500 */
-  --border: rgba(15, 23, 42, 0.12);
-  --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
-  --ring: 0 0 0 4px rgba(59, 130, 246, 0.20);
-  --primary: #2563eb;     /* blue-600 */
-  --primary-hover: #1d4ed8;
-  --radius: 14px;
+    /* Layout & Backgrounds */
+    --bg-color: #f4f6f9;
+    --text-color: #333333;
+    --panel-bg: #ffffff;
+    --card-bg: #ffffff;
+    --header-bg: #0f172a;
+    --header-text: #ffffff;
+    --drop-zone-bg: #f8fafc;
+    --table-hover: #f8fafc;
+
+    /* Typography */
+    --heading-color: #0f172a;
+    --subtext-color: #64748b;
+    --label-color: #475569;
+
+    /* Borders & Inputs */
+    --border-color: #cbd5e1;
+    --input-border: #cbd5e1;
+    --input-focus: #3b82f6;
+    --drop-zone-border: #3b82f6;
+
+    /* Buttons */
+    --btn-primary: #3b82f6;
+    --btn-primary-hover: #2563eb;
+    --btn-secondary: #10b981;
+    --btn-secondary-hover: #059669;
+
+    /* Shadows */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
+/* System Dark Mode Override */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b1220;
-    --surface: #0f172a;
-    --text: #e2e8f0;
-    --muted: #94a3b8;
-    --border: rgba(226, 232, 240, 0.14);
-    --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
-    --ring: 0 0 0 4px rgba(147, 197, 253, 0.22);
-    --primary: #60a5fa;
-    --primary-hover: #93c5fd;
-  }
+    :root {
+        --bg-color: #0f172a;
+        --text-color: #f1f5f9;
+        --panel-bg: #1e293b;
+        --card-bg: #1e293b;
+        --header-bg: #020617;
+        --drop-zone-bg: #0f172a;
+        --table-hover: #1e293b;
+
+        --heading-color: #f8fafc;
+        --subtext-color: #94a3b8;
+        --label-color: #cbd5e1;
+
+        --border-color: #334155;
+        --input-border: #475569;
+        --drop-zone-border: #10b981;
+
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* =============================================
+   Reset & Global
+   ============================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-html,
 body {
-  height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
 }
 
-body {
-  margin: 0;
-  background: radial-gradient(1200px 700px at 20% 10%, rgba(37, 99, 235, 0.08), transparent 55%),
-    radial-gradient(900px 600px at 85% 25%, rgba(16, 185, 129, 0.06), transparent 60%),
-    var(--bg);
-  color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans",
-    "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.5;
+/* =============================================
+   Auth / Gatekeeper Page
+   ============================================= */
+.gatekeeper-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.page {
-  min-height: 100%;
-  display: grid;
-  gap: 18px;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  padding: 28px 16px;
+/* Header */
+.brand-header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-@media (min-width: 860px) {
-  .page {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(380px, 560px);
-    align-items: start;
-    justify-items: center;
-  }
+.brand-header h1 {
+    font-size: 2.5rem;
+    color: var(--heading-color);
+    margin-bottom: 10px;
 }
 
-.card {
-  width: min(560px, 100%);
-  background: color-mix(in srgb, var(--surface) 94%, transparent);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 22px;
-  backdrop-filter: blur(10px);
+.brand-header p {
+    color: var(--subtext-color);
+    font-size: 1.1rem;
 }
 
-.card__header {
-  margin-bottom: 16px;
+/* Auth Cards */
+.auth-sections {
+    display: flex;
+    gap: 30px;
+    width: 100%;
 }
 
-h1,
-h2 {
-  margin: 0 0 6px 0;
-  letter-spacing: -0.02em;
+.auth-card {
+    background: var(--card-bg);
+    flex: 1;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
 }
 
-h1 {
-  font-size: 22px;
+.auth-card h2 {
+    font-size: 1.5rem;
+    color: var(--heading-color);
+    margin-bottom: 8px;
 }
 
-h2 {
-  font-size: 18px;
+.auth-card p {
+    color: var(--subtext-color);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
 }
 
-.muted {
-  color: var(--muted);
+/* Form Styling */
+.input-group {
+    margin-bottom: 20px;
 }
 
-.form {
-  display: grid;
-  gap: 14px;
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--label-color);
+    margin-bottom: 6px;
 }
 
-.field {
-  display: grid;
-  gap: 8px;
+.input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--input-border);
+    background-color: transparent;
+    color: var(--text-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
 }
 
-label {
-  font-weight: 600;
-  font-size: 14px;
+.input-group input:focus {
+    border-color: var(--input-focus);
 }
 
-input[type="file"],
-input[type="text"],
-textarea {
-  width: 100%;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 12px 12px;
-  font: inherit;
-  outline: none;
-  transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-textarea {
-  resize: vertical;
-  min-height: 92px;
+.btn-primary {
+    background-color: var(--btn-primary);
+    color: white;
 }
 
-input[type="file"] {
-  padding: 10px;
+.btn-primary:hover {
+    background-color: var(--btn-primary-hover);
 }
 
-input[type="file"]::file-selector-button {
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  color: var(--text);
-  border-radius: 10px;
-  padding: 8px 10px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+.btn-secondary {
+    background-color: var(--btn-secondary);
+    color: white;
 }
 
-input[type="file"]::file-selector-button:hover {
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
+.btn-secondary:hover {
+    background-color: var(--btn-secondary-hover);
 }
 
-input[type="file"]::file-selector-button:active {
-  transform: translateY(1px);
+/* =============================================
+   Dashboard Page
+   ============================================= */
+.dashboard-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
-input[type="file"]:focus,
-textarea:focus {
-  border-color: color-mix(in srgb, var(--primary) 70%, var(--border));
-  box-shadow: var(--ring);
+/* Header Navbar */
+.dashboard-header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 4px;
+.dashboard-header .brand {
+    font-size: 1.4rem;
+    font-weight: 700;
 }
 
-.button {
-  appearance: none;
-  border: 1px solid color-mix(in srgb, var(--primary) 65%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 86%, white), var(--primary));
-  color: white;
-  font-weight: 700;
-  border-radius: 12px;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+.dashboard-header .brand span {
+    font-weight: 300;
+    font-size: 1.1rem;
+    opacity: 0.8;
 }
 
-.button:hover {
-  filter: brightness(1.02);
-  box-shadow: 0 10px 18px rgba(37, 99, 235, 0.2);
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.button:active {
-  transform: translateY(1px);
+.logout-link {
+    color: #ef4444;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
-.button:focus-visible {
-  outline: none;
-  box-shadow: var(--ring);
+/* Workspace Panels */
+.workspace {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+    flex-grow: 1;
 }
 
-.auth-buttons {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px;
+.panel {
+    background-color: var(--panel-bg);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
 }
 
-#intro {
-  text-align: center;
-  font-family: "Comic Sans MS", "Comic Sans", cursive;
+.panel h2 {
+    font-size: 1.6rem;
+    color: var(--heading-color);
+    margin-bottom: 6px;
 }
 
-.login_homepage {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  width: 100%;
-  padding: 24px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
-  backdrop-filter: blur(10px);
+.panel-subtitle {
+    color: var(--subtext-color);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
 }
 
-
-
-
-.hidden {
-  display: none !important;
+/* Downloads Table */
+.file-list-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
+.file-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
+.file-table th,
+.file-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+}
+
+.file-table th {
+    background-color: var(--table-hover);
+    font-weight: 600;
+    color: var(--subtext-color);
+}
+
+.file-name {
+    font-weight: 500;
+}
+
+.action-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background-color: var(--btn-primary);
+    color: #ffffff;
+}
+
+.action-btn:hover {
+    background-color: var(--btn-primary-hover);
+}
+
+/* Upload Drop-Zone */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.drop-zone {
+    flex-grow: 1;
+    border: 2px dashed var(--drop-zone-border);
+    background-color: var(--drop-zone-bg);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.drop-zone-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.drop-zone-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.drop-zone-or {
+    margin: 10px 0;
+    color: var(--subtext-color);
+    font-size: 0.9rem;
+}
+
+.file-input-label {
+    background-color: var(--text-color);
+    color: var(--panel-bg);
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-upload-submit {
+    margin-top: 20px;
+    background-color: #10b981;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-upload-submit:hover {
+    background-color: #059669;
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 900px) {
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-sections {
+        flex-direction: column;
+    }
+}

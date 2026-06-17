@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestand uploaden</title>
+  <link rel="stylesheet" href="public/css/style.css">
+  <script src="public/js/script.js" defer></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="brand">FileSave <span>Dashboard</span></div>
+            <div class="user-menu">
+                <span class="user-email">user@example.com</span>
+                <a href="index.html" class="logout-link">Log Out</a>
+            </div>
+        </header>
+
+        <main class="workspace">
+            
+            <section class="panel download-panel">
+                <h2>Your Files & Downloads</h2>
+                <p class="panel-subtitle">Manage your uploaded files and generate download links.</p>
+                
+                <div class="file-list-container">
+                    <table class="file-table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Size</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel upload-panel">
+                <h2>Upload New Files</h2>
+                <p class="panel-subtitle">Drag and drop your files here or browse your device.</p>
+                
+                <form action="#" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="drop-zone">
+                        <div class="drop-zone-icon">📤</div>
+                        <span class="drop-zone-text">Drag & Drop files here</span>
+                        <span class="drop-zone-or">or</span>
+                        <label for="file-input" class="file-input-label">Browse Files</label>
+                        <input type="file" id="file-input" name="files[]" multiple style="display: none;">
+                    </div>
+                    </div>
+                </form>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>

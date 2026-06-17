@@ -1,34 +1,33 @@
 <?php
-require_once __DIR__ . '/../../app/models/users.php';
-require_once __DIR__ . '/../../core/database.php';
-require_once __DIR__ . '/../../app/services/AuthService.php';
+session_start();
+require_once("../services/AuthService.php");
+require_once("../../core/database.php");
+$db = new Database();
+$authService = new AuthService($db);
 
-$pdo      = Database::getInstance();
-$users    = new Users($pdo);
-$authService = new AuthService();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
+$action = $_POST['action'] ?? '';
 
-    if ($action === 'register') {
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $email    = $_POST['email'] ?? '';
+if ($action === 'login') {
+    $email    = $_POST['email'];
+    $password = $_POST['password'];
 
-        $result = $authService->register($username, $email, $password);
-        echo $result['message'];
-
-    } elseif ($action === 'login') {
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        $result = $authService->login($username, $password);
-        echo $result['message'];
-
-        if ($result['success']) {
-            header('Location: ../../index.php');
-            exit();
+        if ($authService->login($email, $password) == true) {
+            echo("yes");
+        } else {
+            echo("no");
         }
-    }
+} elseif ($action === 'register') {
+    $name     = $_POST['name'];
+    $email    = $_POST['email'];
+    $password = $_POST['password'];
+
+        if ($authService->register($name, $email, $password) == true) {
+            echo("yes");
+        } else {
+            echo("no");
+        }
+}
 }
 ?>
