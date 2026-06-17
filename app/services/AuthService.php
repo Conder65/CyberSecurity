@@ -196,4 +196,19 @@ class AuthService {
         return ['success' => false, 'message' => 'Fout: Ongeldige inloggegevens!'];
 
     }
+
+    /**
+     * ROUTE GUARD: Call this at the top of protected pages to block non-logged-in users
+     */
+    public static function checkAccess(): void {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+            header('HTTP/1.1 403 Forbidden');
+            echo "Toegang geweigerd. U moet eerst inloggen.";
+            exit();
+        }
+    }
 }
