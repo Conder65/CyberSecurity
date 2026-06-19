@@ -6,7 +6,6 @@ $db = new Database();
 $authService = new AuthService($db);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
 $action = $_POST['action'] ?? '';
 
 if ($action === 'login') {
@@ -14,20 +13,21 @@ if ($action === 'login') {
     $password = $_POST['password'];
 
         if ($authService->login($email, $password) == true) {
-            echo("yes");
+            header("Location: ../../dashboard.php");
         } else {
-            echo("no");
+            header("Location: ../../dashboard.php");
         }
+
 } elseif ($action === 'register') {
     $name     = $_POST['name'];
     $email    = $_POST['email'];
     $password = $_POST['password'];
 
-        if ($authService->register($name, $email, $password) == true) {
-            echo("yes");
-        } else {
-            echo("no");
-        }
+    if ($authService->register($name, $email, $password) == true) {
+        header("Location: authPage.php");
+    } else {
+        header("Location: authPage.php");
+    }
 }
 }
 ?>
