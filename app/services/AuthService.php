@@ -190,6 +190,15 @@ class AuthService {
 
 
         // Generic error message for security (prevents enumeration attacks)
+        require_once __DIR__ . '/JsonLogger.php';
+        $logger = new JsonLogger();
+        $logger->log([
+            'event' => 'login_failed',
+            'success' => false,
+            'identifier' => $email_or_name,
+            'reason' => 'invalid_credentials',
+            'user_id' => null,
+        ]);
 
         return ['success' => false, 'message' => 'Fout: Ongeldige inloggegevens!'];
 

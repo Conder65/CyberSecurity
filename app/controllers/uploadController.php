@@ -3,6 +3,7 @@
 
 // FIXED: Using absolute path routing via dirname to guarantee error-free inclusions
 require_once dirname(__DIR__) . '/services/AuthService.php';
+require_once dirname(__DIR__) . '/services/JsonLogger.php';
 require_once dirname(__DIR__) . '/models/bestand.php';
 require_once dirname(__DIR__) . '/models/upload.php';
 
@@ -39,13 +40,29 @@ class UploadController {
                 header('Content-Type: application/json; charset=utf-8');
             }
             
+            $logger = new JsonLogger();
             if ($result['success']) {
+                $logger->log([
+                    'event' => 'upload_success',
+                    'success' => true,
+                    'user_id' => $user_id,
+                    'filename' => $title,
+                ]);
+
                 http_response_code(200);
                 echo json_encode([
                     'status' => 'success',
                     'message' => $result['message']
                 ]);
             } else {
+                $logger->log([
+                    'event' => 'upload_failed',
+                    'success' => false,
+                    'user_id' => $user_id,
+                    'filename' => $title,
+                    'reason' => $result['message'],
+                ]);
+
                 http_response_code(400);
                 echo json_encode([
                     'status' => 'error',
