@@ -24,9 +24,9 @@ if ($action === 'login') {
     $password = $_POST['password'];
 
     if ($authService->register($name, $email, $password) == true) {
-        header("Location: authPage.php");
+        header("Location: ../../authPage.php");
     } else {
-        header("Location: authPage.php");
+        header("Location: ../../authPage.php");
     }
 }
 }

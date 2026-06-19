@@ -1,10 +1,18 @@
 <?php
+require_once("core/database.php");
 session_start();
-
-if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
     exit;
 }
+
+$db = new Database();
+$pdo = $db->createConnection();
+
+$stmt = $pdo->prepare("SELECT Email FROM users WHERE User_ID = :user_id");
+$stmt->execute(['user_id' => $_SESSION['user_id']]);
+$user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +30,7 @@ if (isset($_SESSION['user_id'])) {
         <header class="dashboard-header">
             <div class="brand">FileSave <span>Dashboard</span></div>
             <div class="user-menu">
-                <span class="user-email">user@example.com</span>
+                <span class="user-email"><?php echo htmlspecialchars($user_data['Email']); ?></span>
                 <a href="index.html" class="logout-link">Log Out</a>
             </div>
         </header>
