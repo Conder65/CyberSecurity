@@ -37,6 +37,11 @@ $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
         </header>
 
         <main class="workspace">
+            <?php
+           $file_stmt = $pdo->prepare("SELECT Upload_ID, Title FROM upload WHERE User_ID = :user_id ORDER BY Created_at DESC");
+$file_stmt->execute(['user_id' => $_SESSION['user_id']]);
+$user_files = $file_stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
             <section class="panel download-panel">
                 <h2>Your Files & Downloads</h2>
@@ -52,6 +57,27 @@ $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
+                            <?php if (empty($user_files)): ?>
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: #888;">No files uploaded yet.</td>
+                            </tr>
+                            <?php else: ?>
+                            <?php foreach ($user_files as $file): ?>
+                            <?php
+                        $filePath = dirname(__DIR__) . '/public/uploads/' . $file['Title'];
+                        $fileSize = file_exists($filePath) ? round(filesize($filePath) / 1024, 2) . ' KB' : 'Unknown';
+                        ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($file['Title']); ?></td>
+                                <td><?php echo $fileSize; ?></td>
+                                <td>
+                                    <a href="app/controllers/downloadController.php?id=<?php echo $file['Upload_ID']; ?>"
+                                        class="download-btn-link"
+                                        style="color: #007bff; text-decoration: none; font-weight: bold;">Download</a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
