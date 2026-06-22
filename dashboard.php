@@ -59,15 +59,15 @@ $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
             <section class="panel upload-panel">
                 <h2>Upload New Files</h2>
                 <p class="panel-subtitle">Drag and drop your files here or browse your device.</p>
-                
                 <form action="#" method="POST" enctype="multipart/form-data" class="upload-form">
                     <div class="drop-zone">
-                        <div class="drop-zone-icon">📤</div>
+                        <div id="preview-container"></div>
                         <span class="drop-zone-text">Drag & Drop files here</span>
                         <span class="drop-zone-or">or</span>
                         <label for="file-input" class="file-input-label">Browse Files</label>
-                        <input type="file" id="file-input" name="files[]" multiple style="display: none;">
+                        <input type="file" id="file-input" name="files[]" multiple style="display: none; required">
                     </div>
+                                            <button type="submit" class="upload-btn">Upload</button>
                     </div>
                 </form>
             </section>

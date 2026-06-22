@@ -373,6 +373,17 @@ body {
     background-color: #059669;
 }
 
+.upload-btn{
+        background-color: var(--text-color);
+    color: var(--panel-bg);
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 24px;
+}
+
 /* =============================================
    Responsive
    ============================================= */

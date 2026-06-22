@@ -4,6 +4,8 @@
   const registerForm = document.getElementById('register-form');
   const loginForm = document.getElementById('login-form');
   const uploadSection = document.getElementById('upload-section');
+  const previewContainer = document.getElementById('preview-container');
+  const fileUploader = document.getElementById('file-input')
 
   const getAuth = () => {
     // Injected by PHP (see index.php)
@@ -47,5 +49,18 @@
     applyAuthState();
     wireToggles();
   });
+
+  fileUploader.addEventListener('change', (event) => {
+    const files = event.target.files;
+  
+  if (files.length > 0) {
+    // Get the name of the first file
+    previewContainer.textContent = `Selected file: ${files[0].name}`;
+  } else {
+    previewContainer.textContent = 'No file chosen';
+  }
+});
+
+
 })();
 
