@@ -7,23 +7,14 @@ class Download {
     private $db;
 
     public function __construct() {
-        global $pdo;
-        if (isset($pdo) && $pdo instanceof PDO) {
-            $this->db = $pdo;
-        } else {
-            // Fallback connection if global scope fails
-            $this->db = new PDO("mysql:host=localhost;dbname=filetransfer;charset=utf8mb4", 'root', '', [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ]);
-        }
+        $database = new Database();
+        $this->db = $database->createConnection();
     }
 
-    // Fetch file record by ID
     public function getFileRecord(int $uploadId) {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM uploads WHERE Upload_ID = :id LIMIT 1");
+            // Select from your exact 4-column table
+            $stmt = $this->db->prepare("SELECT * FROM upload WHERE Upload_ID = :id LIMIT 1");
             $stmt->execute([':id' => $uploadId]);
             return $stmt->fetch();
         } catch (PDOException $e) {
@@ -32,16 +23,18 @@ class Download {
         }
     }
 
-    // Compare current file hash with database recorded hash
-    public function verifyIntegrity(string $physicalPath, string $originalHash): array {
+    public function verifyIntegrity(string $physicalPath, string $titleName): array {
         if (!file_exists($physicalPath)) {
             return ['success' => false, 'message' => 'Fout: Bestand niet gevonden.'];
         }
 
-        // Calculate current SHA-256 hash
+        // Extract original hash from the filename (removing the .zip extension)
+        $originalHash = pathinfo($titleName, PATHINFO_FILENAME);
+
+        // Calculate current live physical file SHA-256 hash
         $currentHash = hash_file('sha256', $physicalPath);
 
-        // Check for modification
+        // Compare both signatures to ensure data integrity
         if ($currentHash !== $originalHash) {
             return [
                 'success' => false,
