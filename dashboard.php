@@ -86,13 +86,14 @@ $user_files = $file_stmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="panel upload-panel">
                 <h2>Upload New Files</h2>
                 <p class="panel-subtitle">Drag and drop your files here or browse your device.</p>
-                <form action="app/controllers/uploadController.php" method="POST" enctype="multipart/form-data"class="upload-form">
+                <form action="app/controllers/uploadController.php" method="POST" enctype="multipart/form-data"
+                    class="upload-form">
                     <div class="drop-zone">
                         <div id="preview-container"></div>
                         <span class="drop-zone-text">Drag & Drop files here</span>
                         <span class="drop-zone-or">or</span>
                         <label for="file-input" class="file-input-label">Browse Files</label>
-                        <input type="file" id="file-input" name="bestand" required style="display: none;">
+                        <input type="file" id="file-input" name="bestand" accept=".zip" required style="display: none;">
                     </div>
                     <button type="submit" class="upload-btn">Upload</button>
                 </form>
