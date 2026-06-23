@@ -25,7 +25,7 @@ class AuthService
     public function register(string $name, string $email, string $password): bool
     {
         
-        // Requires: Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
+        // Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
         $password_regex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
         if (!preg_match($password_regex, $password)) {
             return false; // Password fails security requirements
