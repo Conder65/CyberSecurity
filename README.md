@@ -12,6 +12,13 @@ Het inloggen is afgemaakt. Je kunt in de velden invullen wat nodig is, en in de 
 ### Dag 4 updates 
 Vandaag hebben wij een aantal afrondingstaken verdeeld. De front-end werd bijgewerkt en functioneel afgemaakt. Een logging systeem werd bedacht en aan de taken toegevoegd. Out of scope categorie werd toegevoegd voor alles dat fijn zou zijn, maar niet meer als verplichte toevoeging gedaan. Een logging systeem is toegevoegd voor wie, wanneer welk bestand up- of download. 
 
+
+### Dag 6 updates:
+Vandaag hebben we de applicatie onderworpen aan een grondige Security Review om veelvoorkomende kwetsbaarheden te verhelpen en het systeem robuuster te maken tegen aanvallen:
+**Wachtwoordcomplexiteit:** Regex-validatie toegevoegd bij registratie (min. 8 tekens, hoofdletter, kleine letter, cijfer, speciaal teken) tegen brute-force aanvallen.
+**Veilige Foutmeldingen:** Generieke meldingen geïmplementeerd (*"Onjuiste combinatie..."*) om 'User Enumeration' te voorkomen.
+**Bestandsbeveiliging:** Strikte backend-controle op `.zip` extensie én MIME-type (via `finfo`) om het uploaden van kwaadaardige scripts (Web Shells) te blokkeren.
+
 ## Authors
 Conor 
 Mir
