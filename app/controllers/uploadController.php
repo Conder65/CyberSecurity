@@ -16,17 +16,47 @@ if (!isset($_SESSION['user_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bestand'])) {
     
+    // Set headers early to ensure standard JSON response for any output
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
+
+    $fileTmpPath = $_FILES['bestand']['tmp_name'];
+    $fileName    = $_FILES['bestand']['name'];
+
+    // Validate extension (Must be .zip)
+    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    if ($fileExtension !== 'zip') {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Fout: Alleen .zip bestanden zijn toegestaan.']);
+        exit();
+    }
+
+    // Validate strict MIME-type to prevent executable file masks
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($fileTmpPath);
+    
+    $allowedMimeTypes = [
+        'application/zip', 
+        'application/x-zip-compressed', 
+        'multipart/x-zip', 
+        'application/x-compress'
+    ];
+
+    if (!in_array($mimeType, $allowedMimeTypes)) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Beveiligingsfout: Ongeldig bestandstype gedetecteerd.']);
+        exit();
+    }
+
+    // If validations pass, proceed with original instantiation and model save
     $bestand = new Bestand($_FILES['bestand']);
     $user_id = (int)$_SESSION['user_id'];
 
     $uploadModel = new Upload();
     $result = $uploadModel->saveBestand($bestand, $user_id);
 
-    // Return response
-    if (!headers_sent()) {
-        header('Content-Type: application/json; charset=utf-8');
-    }
-
+    // Return response based on business logic result
     if ($result['success']) {
         http_response_code(200);
         echo json_encode(['status' => 'success', 'message' => $result['message']]);
@@ -36,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bestand'])) {
     }
     exit();
 } else {
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
     http_response_code(400);
     echo json_encode(['status' => 'error', 'message' => 'Fout: Geen bestand ontvangen.']);
     exit();
