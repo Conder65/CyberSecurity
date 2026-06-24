@@ -49,12 +49,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bestand'])) {
         exit();
     }
 
-    // If validations pass, proceed with original instantiation and model save
+    // Capture receiver email from POST request
+    $receiverEmail = isset($_POST['receiver_email']) ? trim($_POST['receiver_email']) : '';
+    if (empty($receiverEmail)) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Fout: Geen ontvanger email opgegeven.']);
+        exit();
+    }
+
+    // Instantiate and pass all 3 required arguments to saveBestand
     $bestand = new Bestand($_FILES['bestand']);
     $user_id = (int)$_SESSION['user_id'];
 
     $uploadModel = new Upload();
-    $result = $uploadModel->saveBestand($bestand, $user_id);
+    $result = $uploadModel->saveBestand($bestand, $user_id, $receiverEmail);
 
     // Return response based on business logic result
     if ($result['success']) {
